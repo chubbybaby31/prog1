@@ -139,6 +139,56 @@ class HorizontalReflect extends ImageEffect {
     }
 }
 
+class Grow extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        int[][] new_pixels = new int[pixels.length * 2][pixels[0].length * 2];
+        for (int r = 0; r < pixels.length; r++) {
+            for (int c = 0; c < pixels[r].length; c++) {
+                new_pixels[r * 2][c * 2] = pixels[r][c];
+                new_pixels[r * 2 + 1][c * 2] = pixels[r][c];
+                new_pixels[r * 2 + 1][c * 2 + 1] = pixels[r][c];
+                new_pixels[r * 2][c * 2 + 1] = pixels[r][c];
+
+            }
+        }
+
+        return new_pixels;
+    }
+}
+
+class Shrink extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        // Assuming even dimensions for original image
+        int[][] new_pixels = new int[pixels.length / 2][pixels[0].length / 2];
+        int red;
+        int green;
+        int blue;
+        for (int r = 0; r < new_pixels.length; r++) {
+            for (int c = 0; c < new_pixels[r].length; c++) {
+                red = getRed(pixels[r * 2][c * 2]) / 4;
+                red += getRed(pixels[r * 2 + 1][c * 2]) / 4;
+                red += getRed(pixels[r * 2 + 1][c * 2 + 1]) / 4;
+                red += getRed(pixels[r * 2][c * 2 + 1]) / 4;
+
+                blue = getBlue(pixels[r * 2][c * 2]) / 4;
+                blue += getBlue(pixels[r * 2 + 1][c * 2]) / 4;
+                blue += getBlue(pixels[r * 2 + 1][c * 2 + 1]) / 4;
+                blue += getBlue(pixels[r * 2][c * 2 + 1]) / 4;
+
+                green = getGreen(pixels[r * 2][c * 2]) / 4;
+                green += getGreen(pixels[r * 2 + 1][c * 2]) / 4;
+                green += getGreen(pixels[r * 2 + 1][c * 2 + 1]) / 4;
+                green += getGreen(pixels[r * 2][c * 2 + 1]) / 4;
+
+                new_pixels[r][c] = makePixel(red, green, blue);
+
+            }
+        }
+
+        return new_pixels;
+    }
+}
+
 class Dummy extends ImageEffect {
 
     public Dummy() {
