@@ -113,6 +113,31 @@ class BlackAndWhite extends ImageEffect {
     }
 }
 
+class VirticalReflect extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        int temp_pixel;
+        for (int r = 0; r < pixels.length; r++) {
+            for (int c = 0; c < pixels[r].length / 2; c++) {
+                temp_pixel = pixels[r][c];
+                pixels[r][c] = pixels[r][pixels[r].length - 1 - c];
+                pixels[r][pixels[r].length - 1 - c] = temp_pixel;
+            }
+        }
+        return pixels;
+    }
+}
+
+class HorizontalReflect extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        int[] temp_pixel;
+        for (int r = 0; r < pixels.length / 2; r++) {
+            temp_pixel = pixels[r];
+            pixels[r] = pixels[pixels.length - 1 - r];
+            pixels[pixels.length - 1 - r] = temp_pixel;
+        }
+        return pixels;
+    }
+}
 
 class Dummy extends ImageEffect {
 
