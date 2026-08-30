@@ -34,6 +34,86 @@ class Invert extends ImageEffect {
     }
 }
 
+class NoRed extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        for (int r = 0; r < pixels.length; r++) {
+            for (int c = 0; c < pixels[r].length; c++) {
+                pixels[r][c] = makePixel(0, getGreen(pixels[r][c]), getBlue(pixels[r][c]));
+            }
+        }
+        return pixels;
+    }
+}
+
+class NoGreen extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        for (int r = 0; r < pixels.length; r++) {
+            for (int c = 0; c < pixels[r].length; c++) {
+                pixels[r][c] = makePixel(getRed(pixels[r][c]), 0, getBlue(pixels[r][c]));
+            }
+        }
+        return pixels;
+    }
+}
+
+class NoBlue extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        for (int r = 0; r < pixels.length; r++) {
+            for (int c = 0; c < pixels[r].length; c++) {
+                pixels[r][c] = makePixel(getRed(pixels[r][c]), getGreen(pixels[r][c]), 0);
+            }
+        }
+        return pixels;
+    }
+}
+
+class RedOnly extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        for (int r = 0; r < pixels.length; r++) {
+            for (int c = 0; c < pixels[r].length; c++) {
+                pixels[r][c] = makePixel(getRed(pixels[r][c]), 0, 0);
+            }
+        }
+        return pixels;
+    }
+}
+
+class GreenOnly extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        for (int r = 0; r < pixels.length; r++) {
+            for (int c = 0; c < pixels[r].length; c++) {
+                pixels[r][c] = makePixel(0, getGreen(pixels[r][c]), 0);
+            }
+        }
+        return pixels;
+    }
+}
+
+class BlueOnly extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        for (int r = 0; r < pixels.length; r++) {
+            for (int c = 0; c < pixels[r].length; c++) {
+                pixels[r][c] = makePixel(0, 0, getBlue(pixels[r][c]));
+            }
+        }
+        return pixels;
+    }
+}
+
+class BlackAndWhite extends ImageEffect {
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        int avg;
+        for (int r = 0; r < pixels.length; r++) {
+            for (int c = 0; c < pixels[r].length; c++) {
+                avg = getRed(pixels[r][c]) + getGreen(pixels[r][c]) + getBlue(pixels[r][c]);
+                pixels[r][c] = makePixel(avg, avg, avg);
+            }
+        }
+        return pixels;
+    }
+}
+
+
 class Dummy extends ImageEffect {
 
     public Dummy() {
