@@ -449,7 +449,6 @@ public class TransformationsTest {
                 new VerticalReflect(),
                 new Grow(),
                 new Shrink(),
-                new Threshold()
         };
 
         for (ImageEffect effect : effects) {
@@ -460,8 +459,53 @@ public class TransformationsTest {
                         + e.getClass().getSimpleName());
             }
         }
+        ImageEffect thresholdTest = new Threshold();
+        thresholdTest.params.get(0).setValue(127);
+        try {
+            thresholdTest.apply(pixels, thresholdTest.params);
+        } catch (Exception e) {
+            fail(thresholdTest.getClass().getSimpleName() + " failed on a jagged array: "
+                    + e.getClass().getSimpleName());
+        }
     }
 
+    @Test
+    public void testGrowNonUniformImage() {
+    
+        final int RED = makePixel(255, 0, 0);
+        final int GREEN = makePixel(0, 255, 0);
+        final int BLUE = makePixel(0, 0, 255);
+        final int WHITE = makePixel(255, 255, 255);
+        final int BLACK = makePixel(0, 0, 0);
+    
+        int[][] pixels = {
+                { RED, GREEN, BLUE },
+                { WHITE },
+                { BLUE, BLACK, GREEN, RED },
+                { BLACK, WHITE }
+        };
+    
+        int[][] expected = {
+                { RED, RED, GREEN, GREEN, BLUE, BLUE },
+                { RED, RED, GREEN, GREEN, BLUE, BLUE },
+                { WHITE, WHITE },
+                { WHITE, WHITE },
+                { BLUE, BLUE, BLACK, BLACK, GREEN, GREEN, RED, RED },
+                { BLUE, BLUE, BLACK, BLACK, GREEN, GREEN, RED, RED },
+                { BLACK, BLACK, WHITE, WHITE },
+                { BLACK, BLACK, WHITE, WHITE }
+        };
+    
+        ImageEffect growEffect = new Grow();
+        int[][] actual = growEffect.apply(pixels, new ArrayList<>());
+    
+        assertEquals(expected.length, actual.length);
+    
+        for (int i = 0; i < expected.length; i++) {
+            assertArrayEquals(expected[i], actual[i]);
+        }
+    }    
+    
     @Test
     public void testShrinkOddDimensions() {
 
