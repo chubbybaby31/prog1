@@ -456,4 +456,39 @@ public class TransformationsTest {
         }
     }
 
+    @Test
+    public void testShrinkOddDimensions() {
+
+        final int RED = makePixel(255, 0, 0);
+        final int GREEN = makePixel(0, 255, 0);
+        final int BLUE = makePixel(0, 0, 255);
+        final int WHITE = makePixel(255, 255, 255);
+
+        int[][] pixels = {
+                { RED, RED, GREEN, GREEN, BLUE },
+                { RED, RED, GREEN, GREEN, BLUE },
+                { BLUE, BLUE, WHITE, WHITE, RED },
+                { BLUE, BLUE, WHITE, WHITE, RED },
+                { GREEN, GREEN, RED, RED, BLUE }
+        };
+
+        int[][] expected = {
+                { RED, GREEN },
+                { BLUE, WHITE }
+        };
+
+        ImageEffect shrinkEffect = new Shrink();
+        int[][] actual = shrinkEffect.apply(pixels, new ArrayList<>());
+
+        assertEquals(expected.length, actual.length);
+
+        for (int i = 0; i < expected.length; i++) {
+            for (int j = 0; j < expected[i].length; j++) {
+                assertEquals(getRed(expected[i][j]), getRed(actual[i][j]));
+                assertEquals(getGreen(expected[i][j]), getGreen(actual[i][j]));
+                assertEquals(getBlue(expected[i][j]), getBlue(actual[i][j]));
+            }
+        }
+    }
+
 }

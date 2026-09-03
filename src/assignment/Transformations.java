@@ -113,6 +113,30 @@ class BlackAndWhite extends ImageEffect {
 
 class VerticalReflect extends ImageEffect {
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        int BLACK = makePixel(0, 0, 0);
+
+        // Find the longest row
+        int maxWidth = 0;
+        for (int r = 0; r < pixels.length; r++) {
+            if (pixels[r].length > maxWidth) {
+                maxWidth = pixels[r].length;
+            }
+        }
+
+        // Add black pixels to shorter rows
+        for (int r = 0; r < pixels.length; r++) {
+            if (pixels[r].length < maxWidth) {
+                int[] newRow = new int[maxWidth];
+                for (int c = 0; c < pixels[r].length; c++) {
+                    newRow[c] = pixels[r][c];
+                }
+                for (int c = pixels[r].length; c < maxWidth; c++) {
+                    newRow[c] = BLACK;
+                }
+                pixels[r] = newRow;
+            }
+        }
+
         int temp_pixel;
         for (int r = 0; r < pixels.length; r++) {
             for (int c = 0; c < pixels[r].length / 2; c++) {
@@ -121,6 +145,7 @@ class VerticalReflect extends ImageEffect {
                 pixels[r][pixels[r].length - 1 - c] = temp_pixel;
             }
         }
+
         return pixels;
     }
 }
@@ -137,16 +162,20 @@ class HorizontalReflect extends ImageEffect {
     }
 }
 
+
 class Grow extends ImageEffect {
+
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
-        int[][] new_pixels = new int[pixels.length * 2][pixels[0].length * 2];
+        int[][] new_pixels = new int[pixels.length * 2][];
         for (int r = 0; r < pixels.length; r++) {
+            int newWidth = pixels[r].length * 2;
+            new_pixels[r * 2] = new int[newWidth];
+            new_pixels[r * 2 + 1] = new int[newWidth];
             for (int c = 0; c < pixels[r].length; c++) {
                 new_pixels[r * 2][c * 2] = pixels[r][c];
+                new_pixels[r * 2][c * 2 + 1] = pixels[r][c];
                 new_pixels[r * 2 + 1][c * 2] = pixels[r][c];
                 new_pixels[r * 2 + 1][c * 2 + 1] = pixels[r][c];
-                new_pixels[r * 2][c * 2 + 1] = pixels[r][c];
-
             }
         }
 
@@ -156,6 +185,38 @@ class Grow extends ImageEffect {
 
 class Shrink extends ImageEffect {
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+
+        // Check for uniform arrays
+        for (int r = 1; r < pixels.length; r++) {
+            if (pixels[r].length != pixels[0].length) {
+                return pixels;
+            }
+        }
+        
+        // Truncate the last row if the height is odd
+        if (pixels.length % 2 != 0) {
+            int[][] truncated = new int[pixels.length - 1][pixels[0].length];
+            
+            for (int r = 0; r < truncated.length; r++) {
+                truncated[r] = pixels[r];
+            }
+            
+            pixels = truncated;
+        }
+
+        // Truncate the last column if the width is odd
+        for (int r = 0; r < pixels.length; r++) {
+            if (pixels[r].length % 2 != 0) {
+                int[] truncatedRow = new int[pixels[r].length - 1];
+
+                for (int c = 0; c < truncatedRow.length; c++) {
+                    truncatedRow[c] = pixels[r][c];
+                }
+
+                pixels[r] = truncatedRow;
+            }
+        }
+
         // Assuming even dimensions for original image
         int[][] new_pixels = new int[pixels.length / 2][pixels[0].length / 2];
         int red;
@@ -163,20 +224,23 @@ class Shrink extends ImageEffect {
         int blue;
         for (int r = 0; r < new_pixels.length; r++) {
             for (int c = 0; c < new_pixels[r].length; c++) {
-                red = getRed(pixels[r * 2][c * 2]) / 4;
-                red += getRed(pixels[r * 2 + 1][c * 2]) / 4;
-                red += getRed(pixels[r * 2 + 1][c * 2 + 1]) / 4;
-                red += getRed(pixels[r * 2][c * 2 + 1]) / 4;
+                red = getRed(pixels[r * 2][c * 2]);
+                red += getRed(pixels[r * 2 + 1][c * 2]);
+                red += getRed(pixels[r * 2 + 1][c * 2 + 1]);
+                red += getRed(pixels[r * 2][c * 2 + 1]);
+                red /= 4;
 
-                blue = getBlue(pixels[r * 2][c * 2]) / 4;
-                blue += getBlue(pixels[r * 2 + 1][c * 2]) / 4;
-                blue += getBlue(pixels[r * 2 + 1][c * 2 + 1]) / 4;
-                blue += getBlue(pixels[r * 2][c * 2 + 1]) / 4;
+                blue = getBlue(pixels[r * 2][c * 2]);
+                blue += getBlue(pixels[r * 2 + 1][c * 2]);
+                blue += getBlue(pixels[r * 2 + 1][c * 2 + 1]);
+                blue += getBlue(pixels[r * 2][c * 2 + 1]);
+                blue /= 4;
 
-                green = getGreen(pixels[r * 2][c * 2]) / 4;
-                green += getGreen(pixels[r * 2 + 1][c * 2]) / 4;
-                green += getGreen(pixels[r * 2 + 1][c * 2 + 1]) / 4;
-                green += getGreen(pixels[r * 2][c * 2 + 1]) / 4;
+                green = getGreen(pixels[r * 2][c * 2]);
+                green += getGreen(pixels[r * 2 + 1][c * 2]);
+                green += getGreen(pixels[r * 2 + 1][c * 2 + 1]);
+                green += getGreen(pixels[r * 2][c * 2 + 1]);
+                green /= 4;
 
                 new_pixels[r][c] = makePixel(red, green, blue);
 
