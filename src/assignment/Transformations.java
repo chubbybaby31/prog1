@@ -254,7 +254,7 @@ class Shrink extends ImageEffect {
 class Threshold extends ImageEffect {
     public Threshold() {
         params = new ArrayList<>();
-        params.add(new ImageEffectParam("Threshold", "Enter threshold value: ", 127, 0, 255));
+        params.add(new ImageEffectParam("Threshold", "Threshold value: ", 127, 0, 255));
     }
 
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
@@ -262,7 +262,7 @@ class Threshold extends ImageEffect {
             int red;
             int green;
             int blue;
-            int threshold = 127;
+            int threshold = params.get(0).getValue();
             for (int c = 0; c < pixels[r].length; c++) {
                 red = getRed(pixels[r][c]) > threshold ? 255 : 0;
                 green = getGreen(pixels[r][c]) > threshold ? 255 : 0;

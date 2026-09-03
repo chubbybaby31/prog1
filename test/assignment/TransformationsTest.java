@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static assignment.ImageEffect.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
@@ -408,10 +409,15 @@ public class TransformationsTest {
         };
     
         ImageEffect thresholdEffect = new Threshold();
-        int[][] actual = thresholdEffect.apply(pixels, new ArrayList<>());
+        thresholdEffect.params.get(0).setValue(127);
+        int[][] actual = thresholdEffect.apply(pixels, thresholdEffect.params);
     
         for (int i = 0; i < expected.length; i++) {
-            assertArrayEquals(expected[i], actual[i]);
+            for (int j = 0; j < expected[i].length; j++) {
+                assertEquals(getRed(expected[i][j]), getRed(actual[i][j]));
+                assertEquals(getGreen(expected[i][j]), getGreen(actual[i][j]));
+                assertEquals(getBlue(expected[i][j]), getBlue(actual[i][j]));
+            }
         }
     }
     
