@@ -22,11 +22,9 @@ import java.util.ArrayList;
 class Invert extends ImageEffect {
     public int[][] apply(int[][] pixels,
                          ArrayList<ImageEffectParam> params) {
-        int width = pixels[0].length;
-        int height = pixels.length;
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int y = 0; y < pixels.length; y++) {
+            for (int x = 0; x < pixels[y].length; x++) {
                 pixels[y][x] = ~pixels[y][x];
             }
         }
@@ -106,14 +104,14 @@ class BlackAndWhite extends ImageEffect {
         for (int r = 0; r < pixels.length; r++) {
             for (int c = 0; c < pixels[r].length; c++) {
                 avg = getRed(pixels[r][c]) + getGreen(pixels[r][c]) + getBlue(pixels[r][c]);
-                pixels[r][c] = makePixel(avg, avg, avg);
+                pixels[r][c] = makePixel(avg / 3, avg / 3, avg / 3);
             }
         }
         return pixels;
     }
 }
 
-class VirticalReflect extends ImageEffect {
+class VerticalReflect extends ImageEffect {
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         int temp_pixel;
         for (int r = 0; r < pixels.length; r++) {
@@ -186,6 +184,29 @@ class Shrink extends ImageEffect {
         }
 
         return new_pixels;
+    }
+}
+
+class Threshold extends ImageEffect {
+    public Threshold() {
+        params = new ArrayList<>();
+        params.add(new ImageEffectParam("Threshold", "Enter threshold value: ", 127, 0, 255));
+    }
+
+    public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
+        for (int r = 0; r < pixels.length; r++) {
+            int red;
+            int green;
+            int blue;
+            int threshold = 127;
+            for (int c = 0; c < pixels[r].length; c++) {
+                red = getRed(pixels[r][c]) > threshold ? 255 : 0;
+                green = getGreen(pixels[r][c]) > threshold ? 255 : 0;
+                blue = getBlue(pixels[r][c]) > threshold ? 255 : 0;
+                pixels[r][c] = makePixel(red, green, blue);
+            }
+        }
+        return pixels;
     }
 }
 
