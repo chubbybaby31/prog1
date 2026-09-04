@@ -423,7 +423,7 @@ public class TransformationsTest {
     
     @Test
     public void testNonUniformImage() {
-
+        // Tests the edge case of an image not being a rectangle
         final int RED = makePixel(255, 0, 0);
         final int GREEN = makePixel(0, 255, 0);
         final int BLUE = makePixel(0, 0, 255);
@@ -471,7 +471,7 @@ public class TransformationsTest {
 
     @Test
     public void testGrowNonUniformImage() {
-    
+        // Test for non-rectangular images specifically for grow to ensure proper output
         final int RED = makePixel(255, 0, 0);
         final int GREEN = makePixel(0, 255, 0);
         final int BLUE = makePixel(0, 0, 255);
@@ -508,7 +508,7 @@ public class TransformationsTest {
     
     @Test
     public void testShrinkOddDimensions() {
-
+        // Tests the edge case of odd dimension values for Shrink effect (Shrink will truncate to even dimensions)
         final int RED = makePixel(255, 0, 0);
         final int GREEN = makePixel(0, 255, 0);
         final int BLUE = makePixel(0, 0, 255);

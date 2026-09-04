@@ -33,6 +33,7 @@ class Invert extends ImageEffect {
 }
 
 class NoRed extends ImageEffect {
+    // Sets red value to 0 and preserves other color channels
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         for (int r = 0; r < pixels.length; r++) {
             for (int c = 0; c < pixels[r].length; c++) {
@@ -44,6 +45,7 @@ class NoRed extends ImageEffect {
 }
 
 class NoGreen extends ImageEffect {
+    // Sets green value to 0 and preserves other color channels
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         for (int r = 0; r < pixels.length; r++) {
             for (int c = 0; c < pixels[r].length; c++) {
@@ -55,6 +57,7 @@ class NoGreen extends ImageEffect {
 }
 
 class NoBlue extends ImageEffect {
+    // Sets blue value to 0 and preserves other color channels
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         for (int r = 0; r < pixels.length; r++) {
             for (int c = 0; c < pixels[r].length; c++) {
@@ -66,6 +69,7 @@ class NoBlue extends ImageEffect {
 }
 
 class RedOnly extends ImageEffect {
+    // Preserves red value and sets other color channels to 0
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         for (int r = 0; r < pixels.length; r++) {
             for (int c = 0; c < pixels[r].length; c++) {
@@ -77,6 +81,7 @@ class RedOnly extends ImageEffect {
 }
 
 class GreenOnly extends ImageEffect {
+    // Preserves green value and sets other color channels to 0
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         for (int r = 0; r < pixels.length; r++) {
             for (int c = 0; c < pixels[r].length; c++) {
@@ -88,6 +93,7 @@ class GreenOnly extends ImageEffect {
 }
 
 class BlueOnly extends ImageEffect {
+    // Preserves blue value and sets other color channels to 0
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         for (int r = 0; r < pixels.length; r++) {
             for (int c = 0; c < pixels[r].length; c++) {
@@ -99,6 +105,7 @@ class BlueOnly extends ImageEffect {
 }
 
 class BlackAndWhite extends ImageEffect {
+    // Averages values of color channels for each pixel and applies that value to each colo channel within each pixel
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         int avg;
         for (int r = 0; r < pixels.length; r++) {
@@ -112,6 +119,7 @@ class BlackAndWhite extends ImageEffect {
 }
 
 class VerticalReflect extends ImageEffect {
+    // Swap pixels within each row using a temp variable
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         int BLACK = makePixel(0, 0, 0);
 
@@ -151,6 +159,7 @@ class VerticalReflect extends ImageEffect {
 }
 
 class HorizontalReflect extends ImageEffect {
+    // Swap rows of pixels with a temp row variable
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         int[] temp_pixel;
         for (int r = 0; r < pixels.length / 2; r++) {
@@ -164,7 +173,7 @@ class HorizontalReflect extends ImageEffect {
 
 
 class Grow extends ImageEffect {
-
+    // Make each pixel a 2x2 grid of the same pixel within the new image
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
         int[][] new_pixels = new int[pixels.length * 2][];
         for (int r = 0; r < pixels.length; r++) {
@@ -185,7 +194,7 @@ class Grow extends ImageEffect {
 
 class Shrink extends ImageEffect {
     public int[][] apply(int[][] pixels, ArrayList<ImageEffectParam> params) {
-
+        // Group pixels into 2x2 squares and average each color channel to calculate the color channel values for the new singular pixel
         // Check for uniform arrays
         for (int r = 1; r < pixels.length; r++) {
             if (pixels[r].length != pixels[0].length) {
@@ -252,6 +261,8 @@ class Shrink extends ImageEffect {
 }
 
 class Threshold extends ImageEffect {
+    // Constructor class to create params Array List
+    // Reads params list to get theshold value and changes each color channel value accordingly
     public Threshold() {
         params = new ArrayList<>();
         params.add(new ImageEffectParam("Threshold", "Threshold value: ", 127, 0, 255));
