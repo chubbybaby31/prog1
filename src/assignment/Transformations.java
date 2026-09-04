@@ -231,25 +231,26 @@ class Shrink extends ImageEffect {
         int red;
         int green;
         int blue;
+        int number_of_pixels = 4;
         for (int r = 0; r < new_pixels.length; r++) {
             for (int c = 0; c < new_pixels[r].length; c++) {
                 red = getRed(pixels[r * 2][c * 2]);
                 red += getRed(pixels[r * 2 + 1][c * 2]);
                 red += getRed(pixels[r * 2 + 1][c * 2 + 1]);
                 red += getRed(pixels[r * 2][c * 2 + 1]);
-                red /= 4;
+                red /= number_of_pixels;
 
                 blue = getBlue(pixels[r * 2][c * 2]);
                 blue += getBlue(pixels[r * 2 + 1][c * 2]);
                 blue += getBlue(pixels[r * 2 + 1][c * 2 + 1]);
                 blue += getBlue(pixels[r * 2][c * 2 + 1]);
-                blue /= 4;
+                blue /= number_of_pixels;
 
                 green = getGreen(pixels[r * 2][c * 2]);
                 green += getGreen(pixels[r * 2 + 1][c * 2]);
                 green += getGreen(pixels[r * 2 + 1][c * 2 + 1]);
                 green += getGreen(pixels[r * 2][c * 2 + 1]);
-                green /= 4;
+                green /= number_of_pixels;
 
                 new_pixels[r][c] = makePixel(red, green, blue);
 
